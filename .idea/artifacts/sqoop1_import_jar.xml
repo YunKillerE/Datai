@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="sqoop1_import:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/sqoop1_import_jar</output-path>
+    <root id="archive" name="sqoop1_import.jar">
+      <element id="module-output" name="sqoop1_import" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../CDH/mysql-connector-java-5.1.38/mysql-connector-java-5.1.38/mysql-connector-java-5.1.38-bin.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
