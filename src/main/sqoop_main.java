@@ -2,12 +2,7 @@ package main;
 
 import tools.DBUtils;
 import tools.PropertiesUtils;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.Arrays;
-import java.util.List;
+import tools.Sqoop_Full;
 import java.util.Map;
 
 /**
@@ -31,24 +26,30 @@ import java.util.Map;
  * 想法：
  * 1，每个函数都包含列式存储Parquet与压缩lzo的选择
  * 2，尽量分层，借鉴spring的架构
+ *
+ * 5,运行
+ * java -Djava.ext.dirs=/opt/cloudera/parcels/CDH/jars:/usr/java/latest/jre/lib/ext/ -jar sqoop1_import.jar main.sqoop_main /root/config.properties YUNCHEN.MYTABLE
+ *
  */
 public class sqoop_main {
 
     public static void main(String[] args) {
 
-        //传入的两个变量，一个properties文件位置，一个是需要抽取的表名
+        //1,传入的两个变量，一个properties文件位置，一个是需要抽取的表名
+        //注意：实际运行时第一个参数时main类名
         String path = args[1];
         String table_name = args[2];
 
-        //获取数据库所需的连接的变量
+        //获取mysql元数据库所需的连接的变量
         String username = PropertiesUtils.Get_Properties(path, "username");
         String url = PropertiesUtils.Get_Properties(path, "url");
         String password = PropertiesUtils.Get_Properties(path, "password");
-        String selectsql = PropertiesUtils.Get_Properties(path, "selectsql")+"\""+table_name+"\"";
+        String selectsql = PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + table_name + "\"";
         String columnname = PropertiesUtils.Get_Properties(path, "columnname");//暂时没什么用
+        String targetdir = PropertiesUtils.Get_Properties(path,"targetdir");
 
         //hdfs集群地址
-        String hdfs_address = PropertiesUtils.Get_Properties(path,"hdfs_address");
+        String hdfs_address = PropertiesUtils.Get_Properties(path, "hdfs_address");
         System.out.println(hdfs_address);
 
         //List<String> columnname_list = Arrays.asList(columnname.split(" "));
@@ -56,9 +57,18 @@ public class sqoop_main {
             System.out.println(s);*/
 
         //所有的值返回再这个map里面，需要什么就取什么
-        Map ss = DBUtils.get_parafile(url,username,password,selectsql);
-        System.out.print(ss.get("database_link"));
+        Map parafile = DBUtils.get_parafile(url, username, password, selectsql);
+        //System.out.print(parafile.get("database_link"));
 
+        //开始取值
+        String parafile_url = (String) parafile.get("database_link");
+        String parafile_username = (String) parafile.get("database_username");
+        String parafile_password = (String) parafile.get("database_pwd");
+        String parafile_table = (String) parafile.get("table_name");
+        String parafile_splitby = (String) parafile.get("sqoop_pri_key");
+
+        Sqoop_Full.full_import(parafile_url, parafile_username, parafile_password,
+                parafile_table, parafile_splitby,targetdir, hdfs_address);
 
     }
 }

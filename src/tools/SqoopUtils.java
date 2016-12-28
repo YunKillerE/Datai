@@ -23,7 +23,7 @@ public class SqoopUtils {
         //com.cloudera.sqoop.tool.SqoopTool tool = new ImportTool();
 
         Configuration conf = new Configuration() ;
-        conf.set("fs.default.name", hdfs_address);//设置hadoop服务地址
+        conf.set("fs.defaultFS", hdfs_address);//设置hadoop服务地址
         Configuration pluginConf = tool.loadPlugins(conf);
 
         Sqoop sqoop = new Sqoop(tool, pluginConf);

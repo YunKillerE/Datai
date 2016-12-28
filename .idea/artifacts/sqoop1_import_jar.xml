@@ -4,6 +4,7 @@
     <root id="archive" name="sqoop1_import.jar">
       <element id="module-output" name="sqoop1_import" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../CDH/mysql-connector-java-5.1.38/mysql-connector-java-5.1.38/mysql-connector-java-5.1.38-bin.jar" path-in-jar="/" />
+      <element id="file-copy" path="$PROJECT_DIR$/../../CDH/oracle-ojdbc6.jar" />
     </root>
   </artifact>
 </component>

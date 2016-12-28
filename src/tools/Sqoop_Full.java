@@ -7,7 +7,7 @@ import org.apache.sqoop.util.OptionsFileUtil;
 import static tools.SqoopUtils.importDataFrom;
 
 /**
- * Created by jimmy on 2016/10/28.
+ *
  * 1，sqoop jar包
  * 2，hadoop-common jar包
  * 3，hadoop-hdfs jar包
@@ -32,7 +32,8 @@ import static tools.SqoopUtils.importDataFrom;
 
 public class Sqoop_Full {
 
-    public static void full_import(String url,String username,String password,String table,String splitby,String target_dir) {
+    public static void full_import(String url,String username,String password,String table,
+                                   String splitby,String target_dir,String hdfs_address) {
         String[] sqoopargs = new String[]{
                 "--connect", url,
                 "--username", username,
@@ -42,7 +43,7 @@ public class Sqoop_Full {
                 "--target-dir", target_dir
         };
         try {
-            importDataFrom(sqoopargs);
+            importDataFrom(sqoopargs,hdfs_address);
         } catch (Exception e){
             e.printStackTrace();
         }
