@@ -14,6 +14,7 @@ import static tools.SqoopUtils.importDataFrom;
  * 4，hadoop-common lib jar包
  * 5，hadoop mapreduce jar包
  * 6，mysql jar包
+ * 7,hive lib目录jar包
  *
  * 完成后打jar包，不需要吧依赖的jar包打进去
  *

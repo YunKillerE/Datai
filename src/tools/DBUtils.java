@@ -50,7 +50,7 @@ public final class DBUtils {
      * @param pstmt
      * @param rs
      */
-    public static void closeResources(Connection conn, PreparedStatement pstmt, ResultSet rs) {
+    public static void closeResources(Connection conn, Statement pstmt, ResultSet rs) {
         if (null != rs) {
             try {
                 rs.close();

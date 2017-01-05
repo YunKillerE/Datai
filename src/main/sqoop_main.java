@@ -1,8 +1,13 @@
 package main;
 
 import tools.DBUtils;
+import tools.HiveUtils;
 import tools.PropertiesUtils;
 import tools.Sqoop_Full;
+
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -29,11 +34,22 @@ import java.util.Map;
  *
  * 5,运行
  * java -Djava.ext.dirs=/opt/cloudera/parcels/CDH/jars:/usr/java/latest/jre/lib/ext/ -jar sqoop1_import.jar main.sqoop_main /root/config.properties YUNCHEN.MYTABLE
+ *需要将oracle和mysql得jar包放到jars目录中或者将sqoop的lib目录加入到上面ext中
+ *
+ * 6，jar
+ *
+ * 1，sqoop jar包
+ * 2，hadoop-common jar包
+ * 3，hadoop-hdfs jar包
+ * 4，hadoop-common lib jar包
+ * 5，hadoop mapreduce jar包
+ * 6，mysql jar包
+ * 7，hive lib目录jar包
  *
  */
 public class sqoop_main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         //1,传入的两个变量，一个properties文件位置，一个是需要抽取的表名
         //注意：实际运行时第一个参数时main类名
@@ -47,10 +63,10 @@ public class sqoop_main {
         String selectsql = PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + table_name + "\"";
         String columnname = PropertiesUtils.Get_Properties(path, "columnname");//暂时没什么用
         String targetdir = PropertiesUtils.Get_Properties(path,"targetdir");
+        String jdbc_hive = PropertiesUtils.Get_Properties(path,"jdbc_hive");
 
         //hdfs集群地址
         String hdfs_address = PropertiesUtils.Get_Properties(path, "hdfs_address");
-        System.out.println(hdfs_address);
 
         //List<String> columnname_list = Arrays.asList(columnname.split(" "));
        /* for(String s:columnname_list)
@@ -58,7 +74,7 @@ public class sqoop_main {
 
         //所有的值返回再这个map里面，需要什么就取什么
         Map parafile = DBUtils.get_parafile(url, username, password, selectsql);
-        //System.out.print(parafile.get("database_link"));
+        System.out.println(parafile.get("database_link"));
 
         //开始取值
         String parafile_url = (String) parafile.get("database_link");
@@ -66,9 +82,42 @@ public class sqoop_main {
         String parafile_password = (String) parafile.get("database_pwd");
         String parafile_table = (String) parafile.get("table_name");
         String parafile_splitby = (String) parafile.get("sqoop_pri_key");
+        String parafile_full_delta = (String) parafile.get("sqoop_delta_full");
+        System.out.println("================================"+parafile_full_delta+"===========================");
 
+        //确定表的存储路径，全量和增量
+        String hdfs_address_ods = null;
+        String partition_name = null;
+        if (parafile_full_delta.equals("full")) {
+            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_full";
+            System.out.println("表存储路径： "+hdfs_address_ods);
+            partition_name = table_name.replace(".","_")+"_full";
+            System.out.println("partition的名称： "+partition_name);
+        }else if (parafile_full_delta.equals("delta")){
+            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_delta";
+            System.out.println(hdfs_address_ods);
+            partition_name = table_name.replace(".","_")+"_delta";
+            System.out.println("partition的名称： "+partition_name);
+        }else{
+            System.out.println("增量或者全量名称录入错误，mysql中sqoop_delta_full字段只能为full或者delta");
+            System.exit(1);
+        }
+
+        //当前时间
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String date = sdf.format(d);
+        System.out.println("当前时间：" + sdf.format(d));
+
+        //全量抽取
         Sqoop_Full.full_import(parafile_url, parafile_username, parafile_password,
-                parafile_table, parafile_splitby,targetdir, hdfs_address);
+                parafile_table, parafile_splitby,hdfs_address_ods, hdfs_address);
+
+        //增量抽取
+
+
+        //导入hvie
+        HiveUtils.AddPartition(jdbc_hive,table_name,hdfs_address_ods,date,partition_name);
 
     }
 }
