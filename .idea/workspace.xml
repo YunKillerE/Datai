@@ -7,7 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4d2d2f91-35e9-41ba-8a03-afe51d73e8ee" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/sqoop_main.java" afterPath="$PROJECT_DIR$/src/main/sqoop_main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/sqoop.sql" afterPath="$PROJECT_DIR$/src/sqoop.sql" />
     </list>
     <ignored path="sqoop1_import.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +28,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="sqoop_main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="sqoop_main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/sqoop_main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="400">
@@ -43,7 +43,7 @@
       <file leaf-file-name="SqoopUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tools/SqoopUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="500">
+            <state relative-caret-position="566">
               <caret line="109" column="56" selection-start-line="109" selection-start-column="56" selection-end-line="109" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -64,7 +64,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DBUtils.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="DBUtils.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tools/DBUtils.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="475">
@@ -253,6 +253,9 @@
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="sqoop1_import" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\yunchen\Desktop\yunchen\sqoop1_import\src" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\yunchen\Desktop\yunchen\sqoop1_import\src" />
     </key>
@@ -781,9 +784,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/sqoop.sql">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        <state relative-caret-position="-1624">
+          <caret line="15" column="52" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/sqoop_main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools/SqoopUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="566">
+          <caret line="109" column="56" selection-start-line="109" selection-start-column="56" selection-end-line="109" selection-end-column="56" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -801,26 +824,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="475">
           <caret line="115" column="13" selection-start-line="115" selection-start-column="13" selection-end-line="115" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/SqoopUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="500">
-          <caret line="109" column="56" selection-start-line="109" selection-start-column="56" selection-end-line="109" selection-end-column="56" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/sqoop_main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

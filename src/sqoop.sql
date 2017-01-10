@@ -68,8 +68,32 @@ CREATE TABLE `sqoop_info` (
 
 LOCK TABLES `sqoop_info` WRITE;
 /*!40000 ALTER TABLE `sqoop_info` DISABLE KEYS */;
-INSERT INTO `sqoop_info` VALUES (1,'YUNCHEN.MYTABLE','INC_DATETIME','delta','no','no','5','ID','no',NULL);
+INSERT INTO `sqoop_info` VALUES (1,'YUNCHEN.MYTABLE','INC_DATETIME','full','no','no','5','ID','no',NULL);
 /*!40000 ALTER TABLE `sqoop_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `table_timestamp`
+--
+
+DROP TABLE IF EXISTS `table_timestamp`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `table_timestamp` (
+  `table_name` varchar(200) NOT NULL,
+  `mintime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `maxtime` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `table_timestamp`
+--
+
+LOCK TABLES `table_timestamp` WRITE;
+/*!40000 ALTER TABLE `table_timestamp` DISABLE KEYS */;
+INSERT INTO `table_timestamp` VALUES ('MYTABLE','0000-00-00 00:00:00','2016-12-29 03:33:02'),('MYTABLE','0000-00-00 00:00:00','2016-12-29 03:33:02');
+/*!40000 ALTER TABLE `table_timestamp` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -81,4 +105,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-01-03 15:00:37
+-- Dump completed on 2017-01-09 21:27:07
