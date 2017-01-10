@@ -7,28 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4d2d2f91-35e9-41ba-8a03-afe51d73e8ee" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/artifacts/sqoop1_import_jar/sqoop1_import.jar" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/META-INF/MANIFEST.MF" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/config.properties" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/main/sqoop_main.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/sqoop.sql" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/DBUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/HdfsUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/HiveUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/PropertiesUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/SqoopUtils.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/Sqoop_Full.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/sqoop_check.class" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/out/production/sqoop1_import/tools/sqoop_delta.class" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/sqoop1_import_jar.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/sqoop1_import_jar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/sqoop1_import.iml" afterPath="$PROJECT_DIR$/sqoop1_import.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/config.properties" afterPath="$PROJECT_DIR$/src/config.properties" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/sqoop_main.java" afterPath="$PROJECT_DIR$/src/main/sqoop_main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tools/DBUtils.java" afterPath="$PROJECT_DIR$/src/tools/DBUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tools/HdfsUtils.java" afterPath="$PROJECT_DIR$/src/tools/HdfsUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tools/SqoopUtils.java" afterPath="$PROJECT_DIR$/src/tools/SqoopUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/tools/Sqoop_Full.java" afterPath="$PROJECT_DIR$/src/tools/Sqoop_Full.java" />
     </list>
     <ignored path="sqoop1_import.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -52,8 +31,8 @@
       <file leaf-file-name="sqoop_main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/sqoop_main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+            <state relative-caret-position="400">
+              <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -840,8 +819,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/sqoop_main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="118" column="0" selection-start-line="118" selection-start-column="0" selection-end-line="118" selection-end-column="0" />
+        <state relative-caret-position="400">
+          <caret line="49" column="3" selection-start-line="49" selection-start-column="3" selection-end-line="49" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

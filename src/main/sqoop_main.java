@@ -45,6 +45,7 @@ import java.util.Map;
  * 5，hadoop mapreduce jar包
  * 6，mysql jar包
  * 7，hive lib目录jar包
+ * 8，sshxcute jar https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/sshxcute/sshxcute-1.0.jar
  *
  */
 public class sqoop_main {
