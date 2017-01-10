@@ -4,7 +4,8 @@ import org.apache.sqoop.Sqoop;
 import org.apache.sqoop.tool.SqoopTool;
 import org.apache.sqoop.util.OptionsFileUtil;
 
-import static tools.SqoopUtils.importDataFrom;
+import static tools.SqoopUtils.importDataUseArgs;
+
 
 /**
  *
@@ -44,11 +45,12 @@ public class Sqoop_Full {
                 "--target-dir", target_dir
         };
         try {
-            importDataFrom(sqoopargs,hdfs_address);
+            importDataUseArgs(sqoopargs,hdfs_address);
         } catch (Exception e){
             e.printStackTrace();
         }
     }
+
 
 
 }

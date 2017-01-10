@@ -1,9 +1,9 @@
 package main;
 
-import tools.DBUtils;
-import tools.HiveUtils;
-import tools.PropertiesUtils;
-import tools.Sqoop_Full;
+import net.neoremind.sshxcute.core.Result;
+import net.neoremind.sshxcute.exception.TaskExecFailException;
+import org.apache.hadoop.hbase.util.RegionSplitter;
+import tools.*;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -49,7 +49,7 @@ import java.util.Map;
  */
 public class sqoop_main {
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, TaskExecFailException {
 
         //1,传入的两个变量，一个properties文件位置，一个是需要抽取的表名
         //注意：实际运行时第一个参数时main类名
@@ -64,6 +64,8 @@ public class sqoop_main {
         String columnname = PropertiesUtils.Get_Properties(path, "columnname");//暂时没什么用
         String targetdir = PropertiesUtils.Get_Properties(path,"targetdir");
         String jdbc_hive = PropertiesUtils.Get_Properties(path,"jdbc_hive");
+        String sqoop_server_ip = PropertiesUtils.Get_Properties(path,"sqoop_server_ip");
+        String sqoop_server_user = PropertiesUtils.Get_Properties(path,"sqoop_server_user");
 
         //hdfs集群地址
         String hdfs_address = PropertiesUtils.Get_Properties(path, "hdfs_address");
@@ -110,14 +112,26 @@ public class sqoop_main {
         System.out.println("当前时间：" + sdf.format(d));
 
         //全量抽取
-        Sqoop_Full.full_import(parafile_url, parafile_username, parafile_password,
-                parafile_table, parafile_splitby,hdfs_address_ods, hdfs_address);
 
+        //暂时放弃这种方法，出现一个未知错误无法解决
+        //Sqoop_Full.full_import(parafile_url, parafile_username, parafile_password,
+         //       parafile_table, parafile_splitby,hdfs_address_ods, hdfs_address);
+
+        String sqoop_command = "sqoop import --connect jdbc:oracle:thin:@192.168.1.28:1521:xe --username yunchen --password root --table MYTABLE -m 1 --target-dir /33";
+        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
+
+        //获取最大值并插入数据库
+        String sqoop_max = "sqoop eval --connect jdbc:oracle:thin:@192.168.1.28:1521:xe -" +
+                "-username yunchen --password root --query \"select max(INC_DATETIME) from "+table_name+"\"";
+        String max = SqoopUtils.SelectMaxUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_max);
+        System.out.println("max="+max);
+        String insertsql = "INSERT INTO sqoop.table_timestamp VALUES('MYTABLE', '0000-00-00 00:00:00',\""+max+"\")";
+        System.out.println("max="+insertsql);
+        DBUtils.insert(url,username,password,insertsql);
         //增量抽取
 
-
         //导入hvie
-        HiveUtils.AddPartition(jdbc_hive,table_name,hdfs_address_ods,date,partition_name);
+        //HiveUtils.AddPartition(jdbc_hive,table_name,hdfs_address_ods,date,partition_name);
 
     }
 }

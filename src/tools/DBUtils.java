@@ -106,4 +106,18 @@ public final class DBUtils {
         return null;
     }
 
+    public static Map<Object, Object> insert(String url, String username, String password, String insert_sql) {
+        try {
+            Connection conn = DBUtils.getConnection(url, username, password);
+            if (!conn.isClosed()) {
+                System.out.println("Succeeded connecting to the Database!");
+                Statement statement = conn.createStatement();
+                statement.execute(insert_sql);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
