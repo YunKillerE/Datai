@@ -141,5 +141,18 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://E:/hadoop/hadoop-2.7.3/share/hadoop/tools/lib" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file://E:/hadoop/hadoop-2.7.3/share/hadoop/tools/lib" />
+        </SOURCES>
+        <jarDirectory url="file://E:/hadoop/hadoop-2.7.3/share/hadoop/tools/lib" recursive="false" />
+        <jarDirectory url="file://E:/hadoop/hadoop-2.7.3/share/hadoop/tools/lib" recursive="false" type="SOURCES" />
+      </library>
+    </orderEntry>
   </component>
 </module>

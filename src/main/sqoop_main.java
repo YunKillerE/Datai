@@ -118,7 +118,7 @@ public class sqoop_main {
         //Sqoop_Full.full_import(parafile_url, parafile_username, parafile_password,
          //       parafile_table, parafile_splitby,hdfs_address_ods, hdfs_address);
 
-        String sqoop_command = "sqoop import --connect jdbc:oracle:thin:@192.168.1.28:1521:xe --username yunchen --password root --table MYTABLE -m 1 --target-dir /33";
+        String sqoop_command = "source /etc/profile;sqoop import --connect jdbc:oracle:thin:@192.168.1.28:1521:xe --username yunchen --password root --table MYTABLE -m 1 --target-dir /33";
         SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
 
         //获取最大值并插入数据库
