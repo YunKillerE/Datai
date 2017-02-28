@@ -16,6 +16,26 @@ import org.apache.hadoop.io.IOUtils;
 
 public class HdfsUtils {
 
+    public static void deleteFile(String file) {
+        Configuration conf = new Configuration();
+        FileSystem fs;
+        try {
+            fs= FileSystem.get(conf);
+            Path path = new Path(file);
+            if (!fs.exists(path)) {
+                System.out.println("File " + file + " does not exists");
+                return;
+            }
+
+            fs.delete(new Path(file), true);
+            fs.close();
+        }catch (IOException e) {
+            System.out.println("deleteFile Exception caught! :" + e);
+            new RuntimeException(e);
+        }
+
+    }
+
     public static FileSystem getConf(String hdfs_address) throws IOException {
         Configuration conf = new Configuration();
         //conf.set("fs.defaultFS", "hdfs://cmserver:8020");

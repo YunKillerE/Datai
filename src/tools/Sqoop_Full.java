@@ -1,11 +1,8 @@
 package tools;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.sqoop.Sqoop;
-import org.apache.sqoop.tool.SqoopTool;
-import org.apache.sqoop.util.OptionsFileUtil;
 
-import static tools.SqoopUtils.importDataUseArgs;
+import net.neoremind.sshxcute.exception.TaskExecFailException;
 
+import java.sql.SQLException;
 
 /**
  *
@@ -34,23 +31,111 @@ import static tools.SqoopUtils.importDataUseArgs;
 
 public class Sqoop_Full {
 
-    public static void full_import(String url,String username,String password,String table,
-                                   String splitby,String target_dir,String hdfs_address) {
-        String[] sqoopargs = new String[]{
-                "--connect", url,
-                "--username", username,
-                "--password", password,
-                "--table", table,
-                "--split-by", splitby,
-                "--target-dir", target_dir
-        };
-        try {
-            importDataUseArgs(sqoopargs,hdfs_address);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    /**
+     * @param url 数据库链接
+     * @param username 用户名
+     * @param password 数据库密码
+     * @param table 表名
+     * @param map_count 并发量
+     * @param target_dir 目标文件夹
+     * @param sqoop_server_ip sqoop服务器ip
+     * @param sqoop_server_user sqoop服务器用户名
+     * */
+    public static void full_importtest (String url, String username, String password, String table, String map_count,
+                                        String target_dir, String sqoop_server_ip, String sqoop_server_user) throws SQLException, TaskExecFailException
+    {
+        String sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir;
+        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
     }
 
+    /**
+     * @param url 数据库链接
+     * @param username 用户名
+     * @param password 数据库密码
+     * @param table 表名
+     * @param map_count 并发量
+     * @param target_dir 目标文件夹
+     * @param param_file 取消TO_DATE函数的参数文件
+     * @param map_column_java 类型隐射参数
+     * @param sqoop_server_ip sqoop服务器ip
+     * @param sqoop_server_user sqoop服务器用户名
+     * */
+    public static void full_import(String url,String username,String password,String table,String map_count,
+                                       String target_dir,String param_file,String map_column_java,String sqoop_server_ip, String sqoop_server_user) throws SQLException, TaskExecFailException
+    {
+        String sqoop_command;
+        if(map_column_java.equals("no")){
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file;
+        }else{
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file+" --map-column-java "+map_column_java;
+        }
+        System.out.print(sqoop_command);
+        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
+    }
+
+    /**
+     * @param url 数据库链接
+     * @param username 用户名
+     * @param password 数据库密码
+     * @param table 表名
+     * @param map_count 并发量
+     * @param target_dir 目标文件夹
+     * @param compression 压缩方式
+     * @param param_file 取消TO_DATE函数的参数文件
+     * @param map_column_java 类型隐射参数
+     * @param sqoop_server_ip sqoop服务器ip
+     * @param sqoop_server_user sqoop服务器用户名
+     * */
+    public static void full_import(String url,String username, String password, String table, String map_count,
+                                   String target_dir,String compression,String param_file,String map_column_java,String sqoop_server_ip, String sqoop_server_user)throws SQLException, TaskExecFailException
+    {
+        String sqoop_command;
+        if(map_column_java.equals("no")){
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " -z --compression-codec "+ compression +" --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file;
+        }else{
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " -z --compression-codec "+ compression +" --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file
+                    +" --map-column-java "+map_column_java;
+        }
+
+
+        System.out.print(sqoop_command);
+        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
+
+    };
+
+    /**
+     * @param url 数据库链接
+     * @param username 用户名
+     * @param password 数据库密码
+     * @param table 表名
+     * @param map_count 并发量
+     * @param target_dir 目标文件夹
+     * @param compression 压缩方式
+     * @param format 存储格式
+     * @param param_file 取消TO_DATE函数的参数文件
+     * @param map_column_java 类型隐射参数
+     * @param sqoop_server_ip sqoop服务器ip
+     * @param sqoop_server_user sqoop服务器用户名
+     * */
+    public static void full_import(String url,String username, String password, String table, String map_count,
+                                   String target_dir,String compression,String format,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user)throws SQLException, TaskExecFailException
+    {
+        String sqoop_command;
+        if(map_column_java.equals("no")){
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " -z --compression-codec "+ compression +"--as-"+format+" --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file;
+        }else{
+            sqoop_command = "source /etc/profile;sqoop import --connect "+url+" --username "+username+" --password "+password+" --table "+table+" -m "+map_count+" --target-dir "+target_dir
+                    + " -z --compression-codec "+ compression +"--as-"+format+" --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file "+param_file
+                    +" --map-column-java "+map_column_java;
+        }
+        System.out.print(sqoop_command);
+        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_command);
+    };
 
 
 }
