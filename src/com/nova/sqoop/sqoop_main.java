@@ -1,7 +1,7 @@
-package main;
+package com.nova.sqoop;
 
+import com.nova.utils.*;
 import net.neoremind.sshxcute.exception.TaskExecFailException;
-import tools.*;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;

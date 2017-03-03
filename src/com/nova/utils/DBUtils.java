@@ -1,4 +1,4 @@
-package tools;
+package com.nova.utils;
 
 import java.sql.*;
 import java.util.ArrayList;

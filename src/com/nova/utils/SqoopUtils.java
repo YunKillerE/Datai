@@ -1,4 +1,4 @@
-package tools;
+package com.nova.utils;
 
 import net.neoremind.sshxcute.core.ConnBean;
 import net.neoremind.sshxcute.core.Result;

@@ -1,4 +1,4 @@
-package tools;
+package com.nova.utils;
 
 /**
  * Created by yunchen on 2017/1/4.
