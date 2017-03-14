@@ -1,13 +1,10 @@
-package com.nova.utils;
+package java.com.nova.utils;
 
 /**
  * Created by yunchen on 2017/1/4.
  */
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 public class HiveUtils {
 

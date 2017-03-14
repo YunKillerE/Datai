@@ -1,12 +1,10 @@
-package com.nova.txt2hdfs;
-import com.nova.utils.*;
+package java.com.nova.txt2hdfs;
+import java.com.nova.utils.HdfsUtils;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by yunchen on 2017/2/28.

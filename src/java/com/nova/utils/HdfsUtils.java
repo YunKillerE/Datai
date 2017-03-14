@@ -1,11 +1,8 @@
-package com.nova.utils;
+package java.com.nova.utils;
 
-import org.apache.calcite.avatica.Meta;
-import org.apache.commons.cli.CommandLine;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.tools.DistCp;
-import org.apache.hadoop.tools.DistCpOptionSwitch;
 import org.apache.hadoop.tools.DistCpOptions;
 
 import java.io.File;
