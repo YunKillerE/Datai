@@ -398,4 +398,36 @@ public class HdfsUtils {
     }
 
 
+    public boolean uploadStructFileToHdfs(String path,String localfile){
+        File file=new File(localfile);
+        if (!file.isFile()) {
+            System.out.println(file.getName());
+            return false;
+        }
+
+        try {
+            FileSystem localFS =FileSystem.getLocal(conf);
+            FileSystem hadoopFS =FileSystem.get(conf);
+            Path hadPath=new Path(path);
+            FSDataOutputStream fsOut=hadoopFS.create(new Path(path+"/"+file.getName()));
+            FSDataInputStream fsIn=localFS.open(new Path(localfile));
+            byte[] buf =new byte[1024];
+            int readbytes=0;
+            while ((readbytes=fsIn.read(buf))>0){
+                fsOut.write(buf,0,readbytes);
+            }
+            fsIn.close();
+            fsOut.close();
+            FileStatus[] hadfiles= hadoopFS.listStatus(hadPath);
+            for(FileStatus fs :hadfiles){
+                System.out.println(fs.toString());
+            }
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }
