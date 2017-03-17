@@ -1,7 +1,6 @@
-package java.com.nova.sqoop;
+package com.nova.sqoop;
 
-import java.com.nova.utils.*;
-
+import com.nova.utils.*;
 import net.neoremind.sshxcute.exception.TaskExecFailException;
 
 

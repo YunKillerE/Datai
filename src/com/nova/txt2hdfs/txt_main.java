@@ -1,5 +1,5 @@
-package java.com.nova.txt2hdfs;
-import java.com.nova.utils.HdfsUtils;
+package com.nova.txt2hdfs;
+import com.nova.utils.HdfsUtils;
 
 import java.io.IOException;
 import java.text.ParseException;

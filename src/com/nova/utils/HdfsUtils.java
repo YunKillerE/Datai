@@ -1,4 +1,4 @@
-package java.com.nova.utils;
+package com.nova.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;

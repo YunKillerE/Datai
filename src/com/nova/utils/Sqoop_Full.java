@@ -1,4 +1,4 @@
-package java.com.nova.utils;
+package com.nova.utils;
 
 import net.neoremind.sshxcute.exception.TaskExecFailException;
 

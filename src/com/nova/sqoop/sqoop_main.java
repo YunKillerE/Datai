@@ -1,7 +1,6 @@
-package java.com.nova.sqoop;
+package com.nova.sqoop;
 
-import java.com.nova.utils.*;
-
+import com.nova.utils.*;
 import net.neoremind.sshxcute.exception.TaskExecFailException;
 
 import java.sql.SQLException;
@@ -223,7 +222,7 @@ public class sqoop_main {
             }
             break;
             default:
-                System.out.println("compress or parquert args input error");
+                System.out.println("CompressTest or parquert args input error");
                 break;
         }
 

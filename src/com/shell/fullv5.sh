@@ -98,13 +98,13 @@ function sqoop_full(){
 	echo $tmp_timestamp >> $PARA_PATH/time/"$4".lastmaxtime
 	
 	if [ X$5 = Xno -a X$6 = Xno ];then
-		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
+		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
 	elif [ X$5 != Xno -a X$6 = Xno ];then                                    
-		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full -z --compression-codec $5 --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
+		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full -z --compression-codec $5 --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
 	elif [ X$5 != Xno -a X$6 != Xno ];then                                   
-		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full -z --compression-codec $5 --as-"$6" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
+		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full -z --compression-codec $5 --as-"$6" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
 	else
-		echo "compress or parquert args input error"
+		echo "CompressTest or parquert args input error"
 		exit 1
 	fi
 	
@@ -131,56 +131,19 @@ function sqoop_delta(){
 	echo t1====$t1
 	echo t2====$t2
 	#sh /opt/para_path/yy.sh "$t1" "$t2"
-		sqoop-import --connect $1 --username $2 --password $3 --query "SELECT * FROM $4 where $7 > '$t1' and $7 <= '$t2' and \$CONDITIONS" -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns --split-by $9
-	elif [ X$5 = Xno -a X$6 = Xno -a X$TIME_VAR = Xno ];then
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
-	elif [ X$5 != Xno -a X$6 = Xno -a X$TIME_VAR = Xno ];then                                    
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
-	elif [ X$5 != Xno -a X$6 != Xno -a X$TIME_VAR = Xno ];then                                   
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --as-"$6" --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
-	else
-		echo "delta args input error"
-		exit 1
-	fi
-     sqoop_merge $1 $2 $3 $4 $7 $9
-	echo $tmp_timestamp >> $PARA_PATH/time/"$4".lastmaxtime
-
-}
-
-function sqoop_delta_only(){
-
-	if [ $1 ];then
-		hdfs dfs -rm -r -f $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta
-	fi
-
-
-        #记录时间戳的最大值
-        TIME=`sqoop eval --connect $1 --username $2 --password $3 --query "select max($7) from $4"`
-        tmp_timestamp="`echo $TIME |awk -F'|' '{print $4}'`"
-        echo $tmp_timestamp
-        echo $TIME
-
-        echo $tmp_timestamp >> $PARA_PATH/time/"$4".lastmaxtime
-	
-	t1=`echo $8 |cut -d'"' -f2`
-	t2=`echo $tmp_timestamp|cut -d' ' -f1-2`
-	if [ X$TIME_VAR = Xyes ];then
-	echo t1====$t1
-	echo t2====$t2
-	#sh /opt/para_path/yy.sh "$t1" "$t2"
-		sqoop-import --connect $1 --username $2 --password $3 --query "SELECT * FROM $4 where $7 > '$t1' and $7 <= '$t2' and \$CONDITIONS" -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns --split-by $9
-	elif [ X$5 = Xno -a X$6 = Xno -a X$TIME_VAR = Xno ];then
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
-	elif [ X$5 != Xno -a X$6 = Xno -a X$TIME_VAR = Xno ];then                                    
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
-	elif [ X$5 != Xno -a X$6 != Xno -a X$TIME_VAR = Xno ];then                                   
-		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --as-"$6" --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims --connection-param-file $PARA_PATH/o.pros $map_columns
+		sqoop-import --connect $1 --username $2 --password $3 --query "SELECT * FROM $4 where $7 > '$t1' and $7 <= '$t2' and \$CONDITIONS" -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns --split-by $9
+	elif [ X$5 = Xno -a X$6 = Xno -a X$10 = no ];then
+		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
+	elif [ X$5 != Xno -a X$6 = Xno -a X$10 = no ];then                                    
+		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
+	elif [ X$5 != Xno -a X$6 != Xno -a X$10 = no ];then                                   
+		sqoop-import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta -z --compression-codec $5 --as-"$6" --check-column $7 --incremental lastmodified --last-value "$8" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
 	else
 		echo "delta args input error"
 		exit 1
 	fi
  
-
+    sqoop_merge $1 $2 $3 $4 $7 $9
 	echo $tmp_timestamp >> $PARA_PATH/time/"$4".lastmaxtime
 
 }
@@ -223,9 +186,9 @@ echo "sqoop merge --new-data $ROOT_DIRECTORY/$4/"$TODAY_TIME"_delta --onto $ROOT
 #	\$1:		:增量或者全量
 function main(){
 
-#	sqoop_check_first $jdbc_link $username $password $table_name
+	sqoop_check_first $jdbc_link $username $password $table_name
 	
-#	sqoop_sql $jdbc_link $username $password $table_name
+	sqoop_sql $jdbc_link $username $password $table_name
 
 	if [ X$1 = Xfull ];then
 	
@@ -234,9 +197,7 @@ function main(){
 	elif [ X$1 = Xdelta ];then
 	
 		sqoop_delta $jdbc_link $username $password $table_name $compress $parquert $timestamp "$lastmaxtime" $PRI_KEY $TIME_VAR
-	elif [ X$1 = Xdelta_only ];then
-	
-		sqoop_delta_only $jdbc_link $username $password $table_name $compress $parquert $timestamp "$lastmaxtime" $PRI_KEY $TIME_VAR
+		
 	else
 		echo "input error! only full or delta!!"
 		exit 1
@@ -344,7 +305,8 @@ shell_check
 
 #==========================获取相应的变量值=============================================
 #获取表的信息
-TABLE_INFO=`cat $PARA_FILE |grep $1`
+#TABLE_INFO=`cat $PARA_FILE |grep $1`
+TABLE_INFO=`python $PARA_PATH/pym.py "select a.database_link,a.database_username,a.database_pwd,b.table_name,b.sqoop_timestamp,b.sqoop_delta_full,b.sqoop_compress_format,b.sqoop_storage_format,b.sqoop_map_count,b.sqoop_pri_key,b.sqoop_time_varchar,b.sqoop_map_column_java from  database_info as a INNER JOIN sqoop_info as b WHERE a.database_id=b.sqoop_id and b.table_name=\"$1\"" s`
 #TABLE_INFO="$1"
 #根据表信息确定相关变量值
 jdbc_link=`echo $TABLE_INFO |awk '{print $1}'`
@@ -368,10 +330,11 @@ fi
 
 #改变字段类型
 MAP_COLUME=`echo $TABLE_INFO |awk '{print $12}'`
-if [ X$MAP_COLUME = Xno ];then
+#if [ -z $MAP_COLUME ];then
+if [  X$MAP_COLUME = XNone ];then
 	map_columns=""
 else
-	map_columns="--map-column-java $MAP_COLUME"
+	map_columns="--map-column-java $MAP_COLUME=String"
 fi
 
 #时间戳字段为非时间类型

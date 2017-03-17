@@ -1,6 +1,5 @@
-set -x
 #!/bin/bash
-
+set -x
 #Auther:云尘
 
 #全局参数
@@ -104,7 +103,7 @@ function sqoop_full(){
 	elif [ X$5 != Xno -a X$6 != Xno ];then                                   
 		sqoop import --connect $1 --username $2 --password $3 --table $4 -m $MAP_COUNT --target-dir $ROOT_DIRECTORY/$4/"$TODAY_TIME"_full -z --compression-codec $5 --as-"$6" --null-non-string '\\N' --null-string '\\N' --fields-terminated-by '\001' --hive-drop-import-delims $map_columns
 	else
-		echo "compress or parquert args input error"
+		echo "CompressTest or parquert args input error"
 		exit 1
 	fi
 	
@@ -305,8 +304,7 @@ shell_check
 
 #==========================获取相应的变量值=============================================
 #获取表的信息
-#TABLE_INFO=`cat $PARA_FILE |grep $1`
-TABLE_INFO=`python $PARA_PATH/pym.py "select a.database_link,a.database_username,a.database_pwd,b.table_name,b.sqoop_timestamp,b.sqoop_delta_full,b.sqoop_compress_format,b.sqoop_storage_format,b.sqoop_map_count,b.sqoop_pri_key,b.sqoop_time_varchar,b.sqoop_map_column_java from  database_info as a INNER JOIN sqoop_info as b WHERE a.database_id=b.sqoop_id and b.table_name=\"$1\"" s`
+TABLE_INFO=`cat $PARA_FILE |grep $1`
 #TABLE_INFO="$1"
 #根据表信息确定相关变量值
 jdbc_link=`echo $TABLE_INFO |awk '{print $1}'`
@@ -330,8 +328,7 @@ fi
 
 #改变字段类型
 MAP_COLUME=`echo $TABLE_INFO |awk '{print $12}'`
-#if [ -z $MAP_COLUME ];then
-if [  X$MAP_COLUME = XNone ];then
+if [ -z $MAP_COLUME ];then
 	map_columns=""
 else
 	map_columns="--map-column-java $MAP_COLUME=String"

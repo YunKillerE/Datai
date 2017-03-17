@@ -1,4 +1,4 @@
-package java.com.nova.utils;
+package com.nova.utils;
 
 import java.io.File;
 import java.text.ParseException;

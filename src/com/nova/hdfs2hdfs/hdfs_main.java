@@ -1,6 +1,6 @@
-package java.com.nova.hdfs2hdfs;
+package com.nova.hdfs2hdfs;
 
-import java.com.nova.utils.HdfsUtils;
+import com.nova.utils.HdfsUtils;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
