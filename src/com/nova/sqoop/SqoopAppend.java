@@ -1,8 +1,7 @@
 package com.nova.sqoop;
 
-import com.nova.utils.*;
 import net.neoremind.sshxcute.exception.TaskExecFailException;
-
+import com.nova.utils.*;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -10,10 +9,10 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * Created by jimlee on 2017/2/14.
+ * Created by shenly on 2017/3/3.
  */
-public class sqoop_append {
-    public static void main(String[] args) throws SQLException, TaskExecFailException {
+public class SqoopAppend {
+    public void append(String path , String tableName , Map<String , String> commMap, Map tableMap){
         //当前时间
         Date d = new Date();
         Date yd = new Date(d.getTime() - 86400000L);
@@ -26,17 +25,12 @@ public class sqoop_append {
         System.out.println("当前时间：" + sdf.format(d));
         System.out.println("昨天时间：" + yesterday);
 
-        //1,传入的两个变量，一个properties文件位置，一个是需要抽取的表名
-        //注意：实际运行时第一个参数时main类名
-        String path = args[1];
-        String table_name = args[2];
-
         //获取mysql元数据库所需的连接的变量
         String username = PropertiesUtils.Get_Properties(path, "username");
         String url = PropertiesUtils.Get_Properties(path, "url");
         String password = PropertiesUtils.Get_Properties(path, "password");
-        String selectsql = PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + table_name + "\"";
-        String selectlasttime = PropertiesUtils.Get_Properties(path, "selectlasttime") + "\"" + table_name + "\"";
+        String selectsql = PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + tableName + "\"";
+        String selectlasttime = PropertiesUtils.Get_Properties(path, "selectlasttime") + "\"" + tableName + "\"";
         String columnname = PropertiesUtils.Get_Properties(path, "columnname");//暂时没什么用
         String targetdir = PropertiesUtils.Get_Properties(path,"targetdir");
         String jdbc_hive = PropertiesUtils.Get_Properties(path,"jdbc_hive");
@@ -79,20 +73,20 @@ public class sqoop_append {
         String partition_name_full = null;
         if (parafile_full_delta.equals("full")) {
 //            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_full";
-            hdfs_address_ods = hdfs_address + targetdir + table_name +"/"+date+"_full";
+            hdfs_address_ods = hdfs_address + targetdir + tableName +"/"+date+"_full";
             System.out.println("表存储路径： "+hdfs_address_ods);
-            partition_name = "ods."+table_name.replace(".","_")+"_full";
+            partition_name = "ods."+tableName.replace(".","_")+"_full";
 //            partition_name = date;
             System.out.println("partition的名称： "+partition_name);
         }else if (parafile_full_delta.equals("delta")){
 //            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_delta";
-            hdfs_address_ods = targetdir + table_name +"/"+date+"_delta";
+            hdfs_address_ods = targetdir + tableName +"/"+date+"_delta";
             System.out.println(hdfs_address_ods);
-            partition_name = "ods."+table_name.replace(".","_")+"_delta";
+            partition_name = "ods."+tableName.replace(".","_")+"_delta";
 //            partition_name = date;
             System.out.println("partition的名称： "+partition_name);
-            hdfs_address_ods_full =  targetdir + table_name +"/"+date+"_full";
-            partition_name_full = "ods."+table_name.replace(".","_")+"_full";
+            hdfs_address_ods_full =  targetdir + tableName +"/"+date+"_full";
+            partition_name_full = "ods."+tableName.replace(".","_")+"_full";
             System.out.println(hdfs_address_ods_full);
             System.out.println("partition的名称： "+partition_name_full);
         }else{
@@ -101,7 +95,7 @@ public class sqoop_append {
         }
 
 
-        HdfsUtils.deleteFile(targetdir + table_name +"/"+date+"_delta");
+        HdfsUtils.deleteFile(targetdir + tableName +"/"+date+"_delta");
         String sqoop_append;
         if(parafile_sqoop_time_varchar.equals("no"))
         {
@@ -212,10 +206,19 @@ public class sqoop_append {
             }
 
         }
-        SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_append);
+        try {
+            SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_append);
+        } catch (TaskExecFailException e) {
+            e.printStackTrace();
+        }
 
         //导入hvie
-        HiveUtils.AddPartition(jdbc_hive,table_name,hdfs_address_ods,date,partition_name);
+        try {
+            HiveUtils.AddPartition(jdbc_hive,tableName,hdfs_address_ods,date,partition_name);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 //        HiveUtils.AddPartition(jdbc_hive,table_name,hdfs_address_ods_full,date,partition_name_full);
     }
 }
+
