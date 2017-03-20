@@ -28,7 +28,7 @@ public class Sqoop_Delta {
      * @param yestday 昨天日期
      * */
     public static void delta_import_varchar(String url,String username, String password,String table, String timestamp,
-                                            String map_count,String target_dir,String param_file, String map_column_java, String split_key,String sqoop_server_ip,String sqoop_server_user,String today ,String yestday)throws SQLException,TaskExecFailException
+                                            String map_count,String target_dir,String param_file, String map_column_java, String split_key,String sqoop_server_ip,String sqoop_server_user,String today ,String yestday)
     {
         String sqoop_command;
         if (!map_column_java.equals("no")) {
@@ -40,7 +40,11 @@ public class Sqoop_Delta {
                     " --query " + "\"select * from " + table + " where " + timestamp + " < '" + today + "' and " + timestamp + " > '" + yestday + "' and \\$CONDITIONS\" -m" + map_count + " --target-dir " + target_dir
                     + " --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file " + param_file + " --split-by " + split_key;
         }
-        SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        try {
+            SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        } catch (TaskExecFailException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -61,7 +65,7 @@ public class Sqoop_Delta {
      *
      * */
     public static void delta_import(String url,String username, String password,String table, String map_count, String target_dir,
-                                   String timestamp,String last_timestamp,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user) throws SQLException,TaskExecFailException
+                                   String timestamp,String last_timestamp,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user)
     {
         String sqoop_command;
         if (map_column_java.equals("no")) {
@@ -73,7 +77,11 @@ public class Sqoop_Delta {
             +" --check-column "+timestamp+" --incremental lastmodified --last-value '"+ last_timestamp
                         + "' --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file " + param_file + " --map-column-java " + map_column_java;
         }
-        SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        try {
+            SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        } catch (TaskExecFailException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -94,7 +102,7 @@ public class Sqoop_Delta {
      * @param sqoop_server_user sqoop服务器用户名
      * */
     public static void delta_import(String url,String username, String password,String table, String map_count, String target_dir,
-                                    String timestamp,String last_timestamp,String compression,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user) throws SQLException,TaskExecFailException
+                                    String timestamp,String last_timestamp,String compression,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user)
     {
         String sqoop_command;
         if (map_column_java.equals("no")) {
@@ -106,7 +114,11 @@ public class Sqoop_Delta {
                     + " -z --compression-codec "+ compression +" --check-column "+timestamp+" --incremental lastmodified --last-value '"+last_timestamp
                     + "' --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file " + param_file + " --map-column-java " + map_column_java;
         }
-        SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        try {
+            SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        } catch (TaskExecFailException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -128,7 +140,7 @@ public class Sqoop_Delta {
      * @param sqoop_server_user sqoop服务器用户名
      * */
     public static void delta_import(String url,String username, String password,String table, String map_count, String target_dir,
-                                    String timestamp,String last_timestamp,String compression, String format,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user) throws SQLException,TaskExecFailException
+                                    String timestamp,String last_timestamp,String compression, String format,String param_file,String map_column_java,String sqoop_server_ip,String sqoop_server_user)
     {
         String sqoop_command;
         if (map_column_java.equals("no")) {
@@ -140,6 +152,10 @@ public class Sqoop_Delta {
                     + " -z --compression-codec "+ compression +" --as-"+format+" --check-column "+timestamp+" --incremental lastmodified --last-value '"+last_timestamp
                     + "' --null-non-string '\\\\N' --null-string '\\\\N' --fields-terminated-by '\\001' --hive-drop-import-delims --connection-param-file " + param_file + " --map-column-java " + map_column_java;
         }
-        SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        try {
+            SqoopUtils.importDataUseSSH(sqoop_server_ip, sqoop_server_user, sqoop_command);
+        } catch (TaskExecFailException e) {
+            e.printStackTrace();
+        }
     }
 }
