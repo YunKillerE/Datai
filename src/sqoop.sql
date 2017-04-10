@@ -106,3 +106,8 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2017-01-09 21:27:07
+
+
+CREATE TABLE hdfs_export_info(id int,database_link VARCHAR(100),database_username VARCHAR(100),database_password VARCHAR(100));
+
+CREATE TABLE hdfs_export_opts(id int,table_name VARCHAR(100),table_columns VARCHAR(1000),update_key VARCHAR(100))
