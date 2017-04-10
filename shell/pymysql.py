@@ -8,8 +8,10 @@
 # Modify Date: 2016-03-22 01:02
 # Function:
 #***************************************************************#
-import pymysql
 import sys
+
+import pymysql
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -32,7 +34,7 @@ class MYSQL:
         """
         if not self.db:
             raise(NameError,"没有设置数据库信息")
-        self.conn = pymysql.connect(host=self.host,user=self.user,password=self.pwd,database=self.db,charset="utf8")
+        self.conn = pymysql.connect(host=self.host, user=self.user, password=self.pwd, database=self.db, charset="utf8")
         cur = self.conn.cursor()
         if not cur:
             raise(NameError,"连接数据库失败")

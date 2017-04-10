@@ -1,5 +1,6 @@
 package com.nova.utils;
 
+import com.cloudera.sqoop.tool.ExportTool;
 import net.neoremind.sshxcute.core.ConnBean;
 import net.neoremind.sshxcute.core.Result;
 import net.neoremind.sshxcute.core.SSHExec;
@@ -73,7 +74,7 @@ public class SqoopUtils {
 
         // Initialize a ConnBean object, parameter list is ip, username, password
 
-        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhbaa");
 
         // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
         SSHExec ssh = SSHExec.getInstance(cb);
@@ -108,6 +109,30 @@ public class SqoopUtils {
         }*/
 
         return max[max.length-2].replace("|","").trim();
+    }
+
+
+    public static boolean exportDataUseOptions() {
+
+        try {
+            SqoopOptions options=new SqoopOptions();
+            options.setConnectString("jdbc:oracle:thin:@192.168.1.227:1521:xe");
+            options.setUsername("YUNCHEN");
+            options.setPassword("yunchen");
+            options.setExportDir("hdfs://cmdata1:8020/dd");
+            options.setTableName("TT");
+            options.setInputFieldsTerminatedBy(',');
+            options.setNumMappers(1);
+            options.setUpdateKeyCol("ID");
+            options.setUpdateMode(com.cloudera.sqoop.SqoopOptions.UpdateMode.AllowInsert);
+            int run = new ExportTool().run((com.cloudera.sqoop.SqoopOptions) options);
+            System.out.println(run);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
     }
 
 }
