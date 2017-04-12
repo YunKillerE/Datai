@@ -1,26 +1,23 @@
-
 ## 简单介绍
 
     基于sqoop封装的抽取程序，封装的目的是配合数据平台展示界面中的数据源管理模块方便获取数据
 
 ## 背景
-
-    1，刚开始用shell写的，抽取元数据存储在一个文本文件中，在生产环境运正常行三个月
-    2，后来改为用shell+python写的，抽取元数据就存储到mysql中了，仅仅测试通过了，未在生产环境下使用过，如果要使用先自己测试好
-    3，再后来直接改为用java写了，抽取元数据也是存储在mysql中，已在生产环境正常运行三个多月了
-
+	1，刚开始用shell写的，抽取元数据存储在一个文本文件中，在生产环境运正常行三个月
+	2，后来改为用shell+python写的，抽取元数据就存储到mysql中了，仅仅测试通过了，未在生产环境下使用过，如果要使用先自己测试好
+	3，再后来直接改为用java写了，抽取元数据也是存储在mysql中，已在生产环境正常运行三个多月了
 
 ## 抽取元数据存储在mysql中的表结构
 
 主要有以下几个表：
 
-    1，database_info         存储源服务器地址，账号密码等，包括RDBMS/FTP/FILESYSTEM...
-    2，sqoop_info            存储抽取规则，比如增量合并、增量不合并、全量、是否压缩、是否做字段映射、并发等
-    3，table_timestamp       存储每个表的抽取时间，主要针对增量抽取
-    4，hdfs_export_info      存储从hdfs导出到rdbms中的地址
-    5，hdfs_export_opts      存储从hdfs导出到rdbms时的相应参数
+	1，database_info         存储源服务器地址，账号密码等，包括RDBMS/FTP/FILESYSTEM...
+	2，sqoop_info            存储抽取规则，比如增量合并、增量不合并、全量、是否压缩、是否做字段映射、并发等
+	3，table_timestamp       存储每个表的抽取时间，主要针对增量抽取
+	4，hdfs_export_info      存储从hdfs导出到rdbms中的地址
+	5，hdfs_export_opts      存储从hdfs导出到rdbms时的相应参数
     
-    表结构，随时都有更新，最新的参照src/sqoop.sql
+	表结构，随时都有更新，最新的参照src/sqoop.sql
 
 
 ## 代码结构介绍
