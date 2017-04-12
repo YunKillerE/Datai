@@ -108,6 +108,33 @@ UNLOCK TABLES;
 -- Dump completed on 2017-01-09 21:27:07
 
 
-CREATE TABLE hdfs_export_info(id int,database_link VARCHAR(100),database_username VARCHAR(100),database_password VARCHAR(100));
+CREATE TABLE `hdfs_export_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `database_link` varchar(100) DEFAULT NULL,
+  `database_username` varchar(100) DEFAULT NULL,
+  `database_password` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
-CREATE TABLE hdfs_export_opts(id int,table_name VARCHAR(100),table_columns VARCHAR(1000),update_key VARCHAR(100))
+
+CREATE TABLE `hdfs_export_opts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `source_id` int(11) DEFAULT NULL,
+  `table_name` varchar(100) DEFAULT NULL,
+  `table_columns` varchar(1000) DEFAULT NULL,
+  `update_key` varchar(100) DEFAULT NULL,
+  `export_dir` varchar(100) DEFAULT NULL,
+  `map_column_java` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+
+
+
+
+
+
+
+
+
+
