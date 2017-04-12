@@ -49,7 +49,7 @@
 
 ## 后续规划
 
-    1，计划将datax合并进来，弥补上面结构化的数据的抽取的缺失
-    2，增加从RDBMS中直接抽取到hbase中的支持
-    3，合并另外一个项目HbaseBulkLoad到当前项目中，实现从hdfs导入数据到hbase中
-    4，增加导入hbase后，采用solr进行二级索引的功能
+	1，计划将datax合并进来，弥补上面结构化的数据的抽取的缺失
+	2，增加从RDBMS中直接抽取到hbase中的支持
+	3，合并另外一个项目HbaseBulkLoad到当前项目中，实现从hdfs导入数据到hbase中
+	4，增加导入hbase后，采用solr进行二级索引的功能
