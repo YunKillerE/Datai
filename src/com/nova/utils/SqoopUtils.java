@@ -74,7 +74,7 @@ public class SqoopUtils {
 
         // Initialize a ConnBean object, parameter list is ip, username, password
 
-        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhbaa");
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhb");
 
         // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
         SSHExec ssh = SSHExec.getInstance(cb);
@@ -91,7 +91,8 @@ public class SqoopUtils {
 
     public static String SelectMaxUseSSH(String sqoop_server_ip, String sqoop_server_user, String sqoop_command) throws TaskExecFailException {
 
-        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
+
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhb");
 
         // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
         SSHExec ssh = SSHExec.getInstance(cb);
