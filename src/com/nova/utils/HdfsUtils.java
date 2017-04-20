@@ -430,4 +430,20 @@ public class HdfsUtils {
     }
 
 
+    public static boolean isDirectoryEmety(String path) throws IOException {
+
+        //Configuration conf = new Configuration();
+        FileSystem hdfs = FileSystem.get(URI.create(path), conf);
+        FileStatus[] fs = hdfs.listStatus(new Path(path));
+
+        boolean abc = true;
+        
+        if(fs.length == 0){
+            abc = false;
+        }
+
+        return abc;
+    }
+
+
 }

@@ -1,10 +1,12 @@
 package com.nova.main;
 
 import com.nova.utils.DBUtils;
+import com.nova.utils.HdfsUtils;
 import com.nova.utils.PropertiesUtils;
 import com.nova.utils.SqoopUtils;
 import net.neoremind.sshxcute.exception.TaskExecFailException;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,7 +17,7 @@ import java.util.Map;
  */
 public class HdfsExportMain {
 
-    public static void main(String[] args) throws TaskExecFailException {
+    public static void main(String[] args) throws TaskExecFailException, IOException {
 
         //sqoop export --connect jdbc:oracle:thin:@192.168.1.226:1521:xe --table TT --username ROOT --password root --export-dir /dd
         // --columns 'ID,NAME' --input-fields-terminated-by ',' --input-lines-terminated-by '\n' -m 1 --update-key ID --update-mode allowinsert
@@ -48,6 +50,7 @@ public class HdfsExportMain {
         Map tableMap = DBUtils.get_parafile(commonMap.get("url"), commonMap.get("username"), commonMap.get("password"), commonMap.get("hdfs2oraclesql"));
         System.out.println("待写入表"+tableName+"信息如下：");
         System.out.println(tableMap);
+        //Map tableMaptmp = DBUtils.get_parafile(commonMap.get("url"), commonMap.get("username"), commonMap.get("password"), commonMap.get("selectsql"));
 
 /*
         String sqoop_command = "source /etc/profile;sqoop export --connect "+tableMap.get("database_link")+" --table "+
@@ -59,30 +62,54 @@ public class HdfsExportMain {
         String export_dir = null;
         String sqoop_command;
 
+        /*String tablenametmp = tableName.split(".")[1];
+        System.out.println("tablenametmp is : "+tablenametmp);*/
+
+        //这里设计到sqoop_info这张表中table_name字段，所以要采用三表联合模糊查询，这里会导致一个问题，如果两个库中的表相似，就会报错
+        //这方便缺陷太明显了，还是用一个字段来存储源表的名称，也就是hdfs上面的二级目录名称
         if(tableMap.get("export_dir").equals("flow")){
-            export_dir = commonMap.get("bdsdir")+tableName+"/"+today+"_delta";//目前增量流水表抽取还没有flow这个值，后续等那边改了，这里的判断就可以取消
+            export_dir = commonMap.get("bdsdir")+tableMap.get("source_table_name")+"/"+today+"_delta";//目前增量流水表抽取还没有flow这个值，后续等那边改了，这里的判断就可以取消
         }else if (tableMap.get("export_dir").equals("full") || tableMap.get("export_dir").equals("delta")){
-            export_dir = commonMap.get("bdsdir")+tableName+"/"+today+"_"+tableMap.get("export_dir");
+            export_dir = commonMap.get("bdsdir")+tableMap.get("source_table_name")+"/"+today+"_"+tableMap.get("export_dir");
         }else{
             System.out.println(tableMap.get("export_dir")+"    export_dir字段的值错误！");
             System.exit(1);
         }
 
-        if(tableMap.get("map_column_java") == null) {
+
+        String sqoop_command_delete = "source /etc/profile;sqoop eval --connect "+tableMap.get("database_link")+" --username "+tableMap.get("database_username")
+                +" --password "+tableMap.get("database_password")+" --query \"delete from "+tableMap.get("table_name")+"\"";
+
+        //如果没有主键或者唯一值的情况，这清空表，再插入，不过这里要判断hdfs上是否有数据再清空以及插入
+        if(tableMap.get("update_key") == null && tableMap.get("map_column_java") == null) {
             sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
                     tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
-                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  ',' --input-lines-terminated-by '\\n' --input-null-string 'NULL'  --input-null-non-string 'NULL' " +
+                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
+                    "-m 1";  //测试，正式时将\\n需要改为\\001,将NULL改为对应的值，还有分隔符逗号也要改为相应的值
+            if(HdfsUtils.isDirectoryEmety(export_dir)) {
+                SqoopUtils.importDataUseSSH(commonMap.get("sqoop_server_ip"), commonMap.get("sqoop_server_user"), sqoop_command_delete);
+            }else {
+                System.out.println("待导出目录为空");
+                System.exit(1);
+            }
+            //有主键或者唯一值情况
+        }else if(tableMap.get("update_key") != null && tableMap.get("map_column_java") == null) {
+            sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
+                    tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
+                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
                     "-m 1 --update-key " + tableMap.get("update_key") + " --update-mode allowinsert";  //测试，正式时将\\n需要改为\\001,将NULL改为对应的值，还有分隔符逗号也要改为相应的值
         }else{
             sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
                     tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
-                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  ',' --input-lines-terminated-by '\\n' --input-null-string 'NULL'  --input-null-non-string 'NULL' " +
+                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
                     "-m 1 --update-key " + tableMap.get("update_key") + " --update-mode allowinsert" + " --map-column-java " + tableMap.get("map_column_java");  //测试，正式时\\n需要改为\\001
         }
 
         System.out.println(sqoop_command);
+        System.out.println(sqoop_command_delete);
 
-       SqoopUtils.importDataUseSSH(commonMap.get("sqoop_server_ip"), commonMap.get("sqoop_server_user"),sqoop_command);
+        //TODO 这里需要加入判断hdfs上是否有数据，如果没有，则不能情况表，否则会oracle就没法对外提供服务了
+        SqoopUtils.importDataUseSSH(commonMap.get("sqoop_server_ip"), commonMap.get("sqoop_server_user"),sqoop_command);
 
     }
 
