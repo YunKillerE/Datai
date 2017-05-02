@@ -15,23 +15,29 @@ import java.util.Map;
 public class DataImport {
     public static void main(String[] args){
 
-        String path = "D:/IDEAworkspace/sqoop1_import/src/config.properties";//properties文件位置
-        String tableName = "YUNCHEN.JQJD_EXTRACT_INFO";//当前需要操作的表名
+        //String path = "D:/IDEAworkspace/sqoop1_import/src/config.properties";//properties文件位置
+        //String tableName = "YUNCHEN.JQJD_EXTRACT_INFO";//当前需要操作的表名
+
+        String path = args[0];//properties文件位置
+        System.out.println("配置文件目录"+path);
+        String tableName = args[1];//当前需要操作的表名
+        System.out.println("当前操作表名"+tableName);
 
         //获取mysql元数据库所需的连接的变量
         Map<String ,String> commonMap = new HashMap<String ,String>();
         commonMap.put("username", PropertiesUtils.Get_Properties(path, "username"));
-        commonMap.put(" url", PropertiesUtils.Get_Properties(path, "url"));
-        commonMap.put(" password", PropertiesUtils.Get_Properties(path, "password"));
-        commonMap.put(" selectsql",PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + tableName + "\"");
-        commonMap.put(" selectlasttime",PropertiesUtils.Get_Properties(path, "selectlasttime") + "\"" + tableName + "\"");
-        commonMap.put(" columnname",PropertiesUtils.Get_Properties(path, "columnname"));//暂时没什么用
-        commonMap.put(" targetdir",PropertiesUtils.Get_Properties(path,"targetdir"));
-        commonMap.put(" jdbc_hive",PropertiesUtils.Get_Properties(path,"jdbc_hive"));
-        commonMap.put(" sqoop_server_ip",PropertiesUtils.Get_Properties(path,"sqoop_server_ip"));
-        commonMap.put(" sqoop_server_user",PropertiesUtils.Get_Properties(path,"sqoop_server_user"));
-        commonMap.put(" para_path",PropertiesUtils.Get_Properties(path,"PARA_PATH"));
-        commonMap.put(" hdfs_address",PropertiesUtils.Get_Properties(path,"hdfs_address"));//hdfs集群地址
+        commonMap.put("url", PropertiesUtils.Get_Properties(path, "url"));
+        commonMap.put("password", PropertiesUtils.Get_Properties(path, "password"));
+        commonMap.put("selectsql",PropertiesUtils.Get_Properties(path, "selectsql") + "\"" + tableName + "\"");
+        commonMap.put("selectlasttime",PropertiesUtils.Get_Properties(path, "selectlasttime") + "\"" + tableName + "\"");
+        commonMap.put("columnname",PropertiesUtils.Get_Properties(path, "columnname"));//暂时没什么用
+        commonMap.put("targetdir",PropertiesUtils.Get_Properties(path,"targetdir"));
+        commonMap.put("jdbc_hive",PropertiesUtils.Get_Properties(path,"jdbc_hive"));
+        commonMap.put("sqoop_server_ip",PropertiesUtils.Get_Properties(path,"sqoop_server_ip"));
+        commonMap.put("sqoop_server_user",PropertiesUtils.Get_Properties(path,"sqoop_server_user"));
+        commonMap.put("sqoop_server_pwd",PropertiesUtils.Get_Properties(path,"sqoop_server_pwd"));
+        commonMap.put("para_path",PropertiesUtils.Get_Properties(path,"PARA_PATH"));
+        commonMap.put("hdfs_address",PropertiesUtils.Get_Properties(path,"hdfs_address"));//hdfs集群地址
 
 
 

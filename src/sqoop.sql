@@ -121,10 +121,10 @@ CREATE TABLE `hdfs_export_opts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `source_id` int(11) DEFAULT NULL,
   `table_name` varchar(100) DEFAULT NULL,
-  `table_columns` varchar(1000) DEFAULT NULL,
+  `table_columns` varchar(2000) DEFAULT NULL,
   `update_key` varchar(100) DEFAULT NULL,
   `export_dir` varchar(100) DEFAULT NULL,
-  `map_column_java` varchar(300) DEFAULT NULL,
+  `map_column_java` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 

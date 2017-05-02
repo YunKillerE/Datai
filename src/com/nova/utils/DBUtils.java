@@ -80,13 +80,19 @@ public final class DBUtils {
     }
 
     public static Map<Object, Object> get_parafile(String url, String username, String password, String select_sql) {
+
+
+        Statement statement = null;
+        Connection conn = null;
+        ResultSet rs = null;
+
         try {
-            Connection conn = DBUtils.getConnection(url, username, password);
+             conn = DBUtils.getConnection(url, username, password);
             if (!conn.isClosed()) {
                 System.out.println("Succeeded connecting to the Database!");
-                Statement statement = conn.createStatement();
+                 statement = conn.createStatement();
                 String selectsql = select_sql;
-                ResultSet rs = statement.executeQuery(selectsql);
+                 rs = statement.executeQuery(selectsql);
                 ResultSetMetaData rData = rs.getMetaData();
                 List<Object> list = new ArrayList<Object>();
                 Map<Object, Object> obj = new HashMap<Object, Object>();
@@ -102,20 +108,32 @@ public final class DBUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try{rs.close();}catch(SQLException ex){}
+            try{statement.close();}catch(SQLException ex){}
+            try{conn.close();}catch(SQLException ex){}
         }
         return null;
     }
 
     public static Map<Object, Object> insert(String url, String username, String password, String insert_sql) {
+
+        Statement statement = null;
+        Connection conn = null;
+        ResultSet rs = null;
+
         try {
-            Connection conn = DBUtils.getConnection(url, username, password);
+             conn = DBUtils.getConnection(url, username, password);
             if (!conn.isClosed()) {
                 System.out.println("Succeeded connecting to the Database!");
-                Statement statement = conn.createStatement();
+                 statement = conn.createStatement();
                 statement.execute(insert_sql);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            try{statement.close();}catch(SQLException ex){}
+            try{conn.close();}catch(SQLException ex){}
         }
         return null;
     }

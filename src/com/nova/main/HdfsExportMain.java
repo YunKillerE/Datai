@@ -80,7 +80,7 @@ public class HdfsExportMain {
         String sqoop_command_delete = "source /etc/profile;sqoop eval --connect "+tableMap.get("database_link")+" --username "+tableMap.get("database_username")
                 +" --password "+tableMap.get("database_password")+" --query \"delete from "+tableMap.get("table_name")+"\"";
 
-        //如果没有主键或者唯一值的情况，这清空表，再插入，不过这里要判断hdfs上是否有数据再清空以及插入
+        //1,如果没有主键或者唯一值的情况，这清空表，再插入，不过这里要判断hdfs上是否有数据再清空以及插入
         if(tableMap.get("update_key") == null && tableMap.get("map_column_java") == null) {
             sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
                     tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
@@ -92,13 +92,28 @@ public class HdfsExportMain {
                 System.out.println("待导出目录为空");
                 System.exit(1);
             }
-            //有主键或者唯一值情况
-        }else if(tableMap.get("update_key") != null && tableMap.get("map_column_java") == null) {
+
+            //没有主键，有映射的情况
+        }else if(tableMap.get("update_key") == null && tableMap.get("map_column_java") != null){
+            sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
+                    tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
+                    + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
+                    "-m 1" + " --map-column-java " + tableMap.get("map_column_java");  //测试，正式时将\\n需要改为\\001,将NULL改为对应的值，还有分隔符逗号也要改为相应的值
+
+            if(HdfsUtils.isDirectoryEmety(export_dir)) {
+                SqoopUtils.importDataUseSSH(commonMap.get("sqoop_server_ip"), commonMap.get("sqoop_server_user"), sqoop_command_delete);
+            }else {
+                System.out.println("待导出目录为空");
+                System.exit(1);
+            }
+        }
+        //3,有主键或者唯一值情况
+        else if(tableMap.get("update_key") != null && tableMap.get("map_column_java") == null) {
             sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
                     tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
                     + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
                     "-m 1 --update-key " + tableMap.get("update_key") + " --update-mode allowinsert";  //测试，正式时将\\n需要改为\\001,将NULL改为对应的值，还有分隔符逗号也要改为相应的值
-        }else{
+        } else{
             sqoop_command = "source /etc/profile;sqoop export --connect " + tableMap.get("database_link") + " --table " +
                     tableMap.get("table_name") + " --username " + tableMap.get("database_username") + " --password " + tableMap.get("database_password")
                     + " --export-dir " + export_dir + " --columns '" + tableMap.get("table_columns") + "' --input-fields-terminated-by  '\\001' --input-lines-terminated-by '\\n' --input-null-string '\\\\N'  --input-null-non-string '\\\\N' " +
@@ -108,7 +123,6 @@ public class HdfsExportMain {
         System.out.println(sqoop_command);
         System.out.println(sqoop_command_delete);
 
-        //TODO 这里需要加入判断hdfs上是否有数据，如果没有，则不能情况表，否则会oracle就没法对外提供服务了
         SqoopUtils.importDataUseSSH(commonMap.get("sqoop_server_ip"), commonMap.get("sqoop_server_user"),sqoop_command);
 
     }

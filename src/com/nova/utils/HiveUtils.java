@@ -48,6 +48,8 @@ public class HiveUtils {
         String sql2 = "alter table " + partition_name + " add IF NOT EXISTS partition" +
                 " (dt=\"" + date + "\")" + " location \"" + filepath + "\"";
 
+        //String sql3 = "create table yc(id int,name varchar(10))";
+
         //System.out.println("Running: " + sql1);
         System.out.println("Running: " + sql2);
         //stmt.execute(sql1);

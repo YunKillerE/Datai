@@ -74,7 +74,7 @@ public class SqoopUtils {
 
         // Initialize a ConnBean object, parameter list is ip, username, password
 
-        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhb");
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
 
         // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
         SSHExec ssh = SSHExec.getInstance(cb);
@@ -92,7 +92,50 @@ public class SqoopUtils {
     public static String SelectMaxUseSSH(String sqoop_server_ip, String sqoop_server_user, String sqoop_command) throws TaskExecFailException {
 
 
-        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"9ijn8uhb");
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
+
+        // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
+        SSHExec ssh = SSHExec.getInstance(cb);
+        // Connect to server
+        ssh.connect();
+        CustomTask sampleTask1 = new ExecCommand("echo $SSH_CLIENT"); // Print Your Client IP By which you connected to ssh server on Horton Sandbox
+        System.out.println(ssh.exec(sampleTask1));
+        CustomTask sampleTask2 = new ExecCommand(sqoop_command);
+        Result result = ssh.exec(sampleTask2);
+        ssh.disconnect();
+
+        String[] max = result.sysout.toString().split("\n");
+ /*       for (int i = 0; i < max.length; i++) {
+            System.out.println(i+"==========="+max[i]);
+        }*/
+
+        return max[max.length-2].replace("|","").trim();
+    }
+
+
+    public static void importDataUseSSH(String sqoop_server_ip, String sqoop_server_user, String sqoop_server_pass, String sqoop_command) throws TaskExecFailException {
+
+        // Initialize a ConnBean object, parameter list is ip, username, password
+
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
+
+        // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
+        SSHExec ssh = SSHExec.getInstance(cb);
+        // Connect to server
+        ssh.connect();
+        CustomTask sampleTask1 = new ExecCommand("echo $SSH_CLIENT"); // Print Your Client IP By which you connected to ssh server on Horton Sandbox
+        System.out.println(ssh.exec(sampleTask1));
+        //CustomTask sampleTask2 = new ExecCommand("sqoop import --connect jdbc:oracle:thin:@192.168.1.28:1521:xe --username yunchen --password root --table MYTABLE -m 1 --target-dir /ooii");
+        CustomTask sampleTask2 = new ExecCommand(sqoop_command);
+        ssh.exec(sampleTask2);
+        ssh.disconnect();
+
+    }
+
+    public static String SelectMaxUseSSH(String sqoop_server_ip, String sqoop_server_user, String sqoop_server_pass, String sqoop_command) throws TaskExecFailException {
+
+
+        ConnBean cb = new ConnBean(sqoop_server_ip, sqoop_server_user,"0okm(IJN");
 
         // Put the ConnBean instance as parameter for SSHExec static method getInstance(ConnBean) to retrieve a singleton SSHExec instance
         SSHExec ssh = SSHExec.getInstance(cb);

@@ -36,6 +36,7 @@ public class SqoopAppend {
         String jdbc_hive = PropertiesUtils.Get_Properties(path,"jdbc_hive");
         String sqoop_server_ip = PropertiesUtils.Get_Properties(path,"sqoop_server_ip");
         String sqoop_server_user = PropertiesUtils.Get_Properties(path,"sqoop_server_user");
+        String sqoop_server_pwd = PropertiesUtils.Get_Properties(path,"sqoop_server_pwd");
         String sqoop_param_file = PropertiesUtils.Get_Properties(path,"sqoop_param_file");//取消TO_date函数参数文件路径
 
         //hdfs集群地址
@@ -71,28 +72,17 @@ public class SqoopAppend {
         String partition_name = null;
         String hdfs_address_ods_full = null;
         String partition_name_full = null;
-        if (parafile_full_delta.equals("full")) {
-//            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_full";
-            hdfs_address_ods = hdfs_address + targetdir + tableName +"/"+date+"_full";
-            System.out.println("表存储路径： "+hdfs_address_ods);
-            partition_name = "ods."+tableName.replace(".","_")+"_full";
-//            partition_name = date;
-            System.out.println("partition的名称： "+partition_name);
-        }else if (parafile_full_delta.equals("delta")){
-//            hdfs_address_ods = hdfs_address + targetdir + table_name.replace(".","_")+"_delta";
-            hdfs_address_ods = targetdir + tableName +"/"+date+"_delta";
-            System.out.println(hdfs_address_ods);
-            partition_name = "ods."+tableName.replace(".","_")+"_delta";
-//            partition_name = date;
-            System.out.println("partition的名称： "+partition_name);
-            hdfs_address_ods_full =  targetdir + tableName +"/"+date+"_full";
-            partition_name_full = "ods."+tableName.replace(".","_")+"_full";
-            System.out.println(hdfs_address_ods_full);
-            System.out.println("partition的名称： "+partition_name_full);
-        }else{
-            System.out.println("增量或者全量名称录入错误，mysql中sqoop_delta_full字段只能为full或者delta");
-            System.exit(1);
-        }
+
+        //这部分有变动，带检验
+        hdfs_address_ods = targetdir + tableName +"/"+date+"_delta";
+        System.out.println(hdfs_address_ods);
+        partition_name = "ods."+tableName.replace(".","_")+"_delta";
+        System.out.println("partition的名称： "+partition_name);
+        hdfs_address_ods_full =  targetdir + tableName +"/"+date+"_full";
+        partition_name_full = "ods."+tableName.replace(".","_")+"_full";
+        System.out.println(hdfs_address_ods_full);
+        System.out.println("partition的名称： "+partition_name_full);
+
 
 
         HdfsUtils.deleteFile(targetdir + tableName +"/"+date+"_delta");
@@ -207,7 +197,7 @@ public class SqoopAppend {
 
         }
         try {
-            SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_append);
+            SqoopUtils.importDataUseSSH(sqoop_server_ip,sqoop_server_user,sqoop_server_pwd,sqoop_append);
         } catch (TaskExecFailException e) {
             e.printStackTrace();
         }
